@@ -1,11 +1,21 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  updateProfile,
+} from "firebase/auth";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import OAuth from "../components/OAuth";
+import { db } from "../firebase";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import { useNavigate } from "react-router-dom";
+import Toast from "../assets/Toast";
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false); //don't want to see the password as the default. If the showPassword is false make the type password, if true should be text
+  const [error, setError] = useState(null); // add a state variable to store the error
+  const [toastVisible, setToastVisible] = useState(false); // add a state variable to track the visibility of the Toast component
 
   const [formData, setFormData] = useState({
     //created the formData Hook
@@ -14,6 +24,8 @@ export default function SignUp() {
     password: "",
   });
   const { name, email, password } = formData; //destructured email & password from the formData, so i can use the email variable inside the form
+  const navigate = useNavigate();
+
   function onChange(event) {
     //this event will give me all the information i'll write in the form
     setFormData((prevState) => ({
@@ -21,6 +33,30 @@ export default function SignUp() {
       ...prevState,
       [event.target.id]: event.target.value, //so whatever typing will do, it will be safe in this formData
     }));
+  }
+  async function onSubmit(event) {
+    event.preventDefault();
+    try {
+      const auth = getAuth();
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      updateProfile(auth.currentUser, {
+        displayName: name,
+      });
+      const user = userCredential.user;
+      const formDataCopy = { ...formData };
+      delete formDataCopy.password;
+      formDataCopy.timestamp = serverTimestamp();
+      await setDoc(doc(db, "users", user.uid), formDataCopy); //whatever is in formDataCopy we want to save it inside this collection with this uid
+      navigate("/");
+      setToastVisible(false); // hide the Toast component if the submission is successful
+    } catch (error) {
+      setError(error); // store the error in the state variable
+      setToastVisible(true); // show the Toast component if there is an error
+    }
   }
 
   return (
@@ -35,7 +71,7 @@ export default function SignUp() {
           />
         </div>
         <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20">
-          <form>
+          <form onSubmit={onSubmit}>
             <input
               type="text"
               id="name"
@@ -108,6 +144,12 @@ export default function SignUp() {
           </form>
         </div>
       </div>
+      {toastVisible && (
+        <Toast
+          message="Something went wrong with the registration"
+          type="error"
+        />
+      )}
     </section>
   );
 }
