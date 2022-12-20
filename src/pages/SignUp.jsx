@@ -1,22 +1,18 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
 import {
   createUserWithEmailAndPassword,
   getAuth,
-  updateProfile,
+  updateProfile
 } from "firebase/auth";
+import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import React, { useState } from "react";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
+import { Link, useNavigate } from "react-router-dom";
 import OAuth from "../components/OAuth";
 import { db } from "../firebase";
-import { doc, serverTimestamp, setDoc } from "firebase/firestore";
-import { useNavigate } from "react-router-dom";
-import Toast from "../assets/Toast";
+import {toast} from 'react-toastify';
 
 export default function SignUp() {
   const [showPassword, setShowPassword] = useState(false); //don't want to see the password as the default. If the showPassword is false make the type password, if true should be text
-  const [error, setError] = useState(null); // add a state variable to store the error
-  const [toastVisible, setToastVisible] = useState(false); // add a state variable to track the visibility of the Toast component
-
   const [formData, setFormData] = useState({
     //created the formData Hook
     name: "",
@@ -50,12 +46,11 @@ export default function SignUp() {
       const formDataCopy = { ...formData };
       delete formDataCopy.password;
       formDataCopy.timestamp = serverTimestamp();
+
       await setDoc(doc(db, "users", user.uid), formDataCopy); //whatever is in formDataCopy we want to save it inside this collection with this uid
-      navigate("/");
-      setToastVisible(false); // hide the Toast component if the submission is successful
+      // navigate("/");
     } catch (error) {
-      setError(error); // store the error in the state variable
-      setToastVisible(true); // show the Toast component if there is an error
+      toast.error('Something went wrong with the registration');
     }
   }
 
@@ -143,13 +138,7 @@ export default function SignUp() {
             <OAuth />
           </form>
         </div>
-      </div>
-      {toastVisible && (
-        <Toast
-          message="Something went wrong with the registration"
-          type="error"
-        />
-      )}
+      </div>     
     </section>
   );
 }
