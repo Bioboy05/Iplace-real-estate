@@ -1,14 +1,31 @@
+import { getAuth, sendPasswordResetEmail } from "firebase/auth";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 import OAuth from "../components/OAuth";
 
 export default function ForgotPassword() {
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
+
   function onChange(event) {
-    setEmail(event.target.value) 
-    };
-  
+    setEmail(event.target.value);
+  }
+
+  //create an onSubmit function which is going to be async, because it's returning a promise and we need to use await for that
+  async function onSubmit(event) {
+    event.preventDefault() //prevents the refreshing of the page
+    try {
+      const auth = getAuth() //auth is coming from getAuth from firebase
+      await sendPasswordResetEmail(auth, email) //we wait for the function that gets the auth and email (got from the above useState hook)
+      
+      //after sending the above data, we pop-up a toast with a success message
+      toast.success('Email was sent')
+    } catch (error) {
+      toast.error('Could not send reset password')
+    }
+  }
+
   return (
     <section>
       <h1 className="text-3xl text-center mt-6 font-bold">Forgot Password</h1>
@@ -21,7 +38,7 @@ export default function ForgotPassword() {
           />
         </div>
         <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20">
-          <form>
+          <form onSubmit={onSubmit}>
             <input
               type="email"
               id="email"

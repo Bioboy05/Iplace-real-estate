@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
-import { toast } from "react-toastify";
+import { Link, useNavigate } from "react-router-dom"; //imported useNavigate to redirect the user to the Homepage
+import { signInWithEmailAndPassword, getAuth } from "firebase/auth"; //imported the special methods from firebase
+import { toast } from "react-toastify"; //imported the toastify (error-message)
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import OAuth from "../components/OAuth";
-import { async } from "@firebase/util";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false); //don't want to see the password as the default. If the showPassword is false make the type password, if true should be text
@@ -25,16 +24,17 @@ export default function SignIn() {
     }));
   }
 
+  //created async function onSubmit that prevents the default refreshing of the page & we added onSubmit to the form
   async function onSubmit(event) {
     event.preventDefault();
     try {
-      const auth = getAuth(); //we have the auth now and we have the email & password destructured from the formData from above
+      const auth = getAuth(); //we have the auth now and we have the email & password destructured from the formData from above to sign in the person
       const userCredentials = await signInWithEmailAndPassword(
         auth,
         email,
         password
       ); //obtaining the userCredentials. This is going to get us the auth, email and password
-      // if it is successful and it exists, we can go to the Homepage
+      // if it is successful and it exists, we are redirected to the Homepage, otherwise an error is shown
       if (userCredentials.user) {
         navigate("/");
       }
