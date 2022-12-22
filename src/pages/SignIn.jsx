@@ -1,8 +1,10 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { signInWithEmailAndPassword, getAuth } from "firebase/auth";
+import { toast } from "react-toastify";
 import { AiFillEye, AiFillEyeInvisible } from "react-icons/ai";
 import OAuth from "../components/OAuth";
+import { async } from "@firebase/util";
 
 export default function SignIn() {
   const [showPassword, setShowPassword] = useState(false); //don't want to see the password as the default. If the showPassword is false make the type password, if true should be text
@@ -13,6 +15,7 @@ export default function SignIn() {
     password: "",
   });
   const { email, password } = formData; //destructured email & password from the formData, so i can use the email variable inside the form
+  const navigate = useNavigate();
   function onChange(event) {
     //this event will give me all the information i'll write in the form
     setFormData((prevState) => ({
@@ -22,6 +25,23 @@ export default function SignIn() {
     }));
   }
 
+  async function onSubmit(event) {
+    event.preventDefault();
+    try {
+      const auth = getAuth(); //we have the auth now and we have the email & password destructured from the formData from above
+      const userCredentials = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      ); //obtaining the userCredentials. This is going to get us the auth, email and password
+      // if it is successful and it exists, we can go to the Homepage
+      if (userCredentials.user) {
+        navigate("/");
+      }
+    } catch (error) {
+      toast.error("Bad user credentials");
+    }
+  }
   return (
     <section>
       <h1 className="text-3xl text-center mt-6 font-bold">Sign in</h1>
@@ -34,7 +54,7 @@ export default function SignIn() {
           />
         </div>
         <div className="w-full md:w-[67%] lg:w-[40%] lg:ml-20">
-          <form>
+          <form onSubmit={onSubmit}>
             <input
               type="email"
               id="email"
