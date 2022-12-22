@@ -14,11 +14,11 @@ export default function ForgotPassword() {
 
   //create an onSubmit function which is going to be async, because it's returning a promise and we need to use await for that
   async function onSubmit(event) {
-    event.preventDefault() //prevents the refreshing of the page
+    event.preventDefault() //prevents the default refreshing of the page
     try {
       const auth = getAuth() //auth is coming from getAuth from firebase
       await sendPasswordResetEmail(auth, email) //we wait for the function that gets the auth and email (got from the above useState hook)
-      
+
       //after sending the above data, we pop-up a toast with a success message
       toast.success('Email was sent')
     } catch (error) {
