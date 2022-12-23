@@ -35,7 +35,7 @@ export default function Header() {
   }, [auth]);
 
   return (
-    <div className="bg-white border-b shadow-lg sticky top-0 z-50">
+    <div className="bg-white border-b shadow-lg sticky top-0 z-40">
       <header className="flex justify-between items-center px-3 max-w-6xl mx-auto">
         <div
           className="flex items-center text-lg cursor-pointer font-bold"
