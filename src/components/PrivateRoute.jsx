@@ -6,7 +6,7 @@ import {useAuthStatus} from "../hooks/useAuthStatus";
 export default function PrivateRoute() {
   //instead of bellow dummy data, the returning {loggedIn, checkingStatus} data from the custom useAuthStatus hook
   //   const loggedIn = false;
-  const {loggedIn, checkingStatus} = useAuthStatus()
+  const {loggedIn, checkingStatus} = useAuthStatus();
   if(checkingStatus) { //if checkingStatus is true = we get the information => Loading is rendered
     return <h3>Loading...</h3>
   } 
