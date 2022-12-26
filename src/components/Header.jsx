@@ -47,7 +47,8 @@ export default function Header() {
             className="h-11 cursor-pointer"
             onClick={() => navigate("/")}
           />
-          <div>Find your place</div>
+          <div className="min-[320px]:text-center max-[450px]:hidden 
+          ">Find your place</div>
         </div>
         <div>
           <ul className="flex space-x-10">
