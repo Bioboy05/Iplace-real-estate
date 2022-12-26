@@ -90,7 +90,7 @@ export default function Profile() {
       const q = query(
         listingRef,
         where("userRef", "==", auth.currentUser.uid),
-        orderBy("timestamp", "descending")
+        orderBy("timestamp", "desc")
       );
       //after we made the query, we can use getDocs to get the document
       //created a const that makes a snapshot, and use await to use the getDocs from firestore
@@ -109,7 +109,7 @@ export default function Profile() {
       querySnap.forEach((doc) => {
         return listings.push({
           id: doc.id,
-          data: doc.data,
+          data: doc.data(),
         });
       });
       //we now have all the data from listings, so we need to put it inside a hook called listings,setListings
@@ -194,9 +194,11 @@ export default function Profile() {
         {/* if the loading is true we don't want to see this section */}
         {!loading && listings.length > 0 && (
           <>
-            <h2 className="text-2xl text-center font-semibold">My Listings</h2>
-            {/* we want to make an ul for the listing we have */}
-            <ul>
+            <h2 className="text-2xl text-center font-semibold mb-6">
+              My Listings
+            </h2>
+            {/* we want to make an ul for the listing we have and insert the breakpoints using grid */}
+            <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 mt-6 mb-6">
               {/* inside the ul, we want to loop with .map through the listings and return a component, and being a map we need a key, otherwise will get an error */}
               {listings.map((listing) => (
                 <ListingItem
