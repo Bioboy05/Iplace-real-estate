@@ -8,7 +8,7 @@ import {
   getDownloadURL,
 } from "firebase/storage";
 import { getAuth } from "firebase/auth";
-import { v4 as uuidv4 } from "uuid"; //with this v4 standard we can use uuidv4
+import { v4 as uuidv4 } from "uuid"; //with this v4 standard we can use uuidv4 that creates a dynamic name for our storage
 import { addDoc, collection, serverTimestamp } from "firebase/firestore";
 import { db } from "../firebase";
 import { useNavigate } from "react-router-dom";
@@ -249,6 +249,7 @@ export default function CreateListing() {
       imgUrls,
       geoLocation,
       timestamp: serverTimestamp(),
+      userRef: auth.currentUser.uid,
     };
 
     //now some data is going to be removed
@@ -265,12 +266,13 @@ export default function CreateListing() {
     //so we create a document reference
     //collection is db and listings, addDoc is getting the collection,
     //but outside the collection we're going to submit the data - formDataCopy
+    //so in other words, we submitted this formDataCopy to our collection "listings" as a new listing
     const docRef = await addDoc(collection(db, "listings"), formDataCopy);
     setLoading(false); //end the loading if everything is ok
     toast.success("Listing created");
 
     //after, the person will be redirected to the listing page
-    //dynamic URL because we want the url to be based on the listing id - rent/sale  
+    //dynamic URL because we want the url to be based on the listing id - rent/sale
     navigate(`/category/${formDataCopy.type}/${docRef.id}`);
   }
 
@@ -541,7 +543,7 @@ export default function CreateListing() {
 
           {/* It will be permitted only 6 pics, otherwise the form won't be submitted, also accepting only a 3 formats of pics, like a validation directly from here, and one will be from firebase database */}
           <p className="text-gray-600">
-            The first image will be the cover (max 6)
+            The first image will be the cover (max 6 - under 2 Mb/pic)
           </p>
           <input
             type="file"

@@ -1,10 +1,19 @@
 import { getAuth, updateProfile } from "firebase/auth"; //imported updateProfile for updating the authentication
-import { doc, updateDoc } from "firebase/firestore"; //this two for updating the database
-import React, { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { toast } from "react-toastify"; //to create the notification for a possible error and success
-import { db } from "../firebase";
+import {
+  collection,
+  doc,
+  getDocs,
+  orderBy,
+  query,
+  updateDoc,
+  where,
+} from "firebase/firestore"; //this two for updating the database
+import React, { useEffect, useState } from "react";
 import { FcHome } from "react-icons/fc";
+import { Link, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify"; //to create the notification for a possible error and success
+import ListingItem from "../components/ListingItem";
+import { db } from "../firebase";
 
 export default function Profile() {
   const auth = getAuth();
@@ -12,6 +21,8 @@ export default function Profile() {
   const [changeDetails, setChangeDetails] =
     useState(false); /*false, because firstly we don't have any change,
   but when we click on Edit, we will make it opposite*/
+  const [listings, setListings] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     //Won't work directly, because the page is rendering before the data that is coming from firebase, we get an error because we need to wait until the data has come from the auth, so we add a middleman
     name: auth.currentUser.displayName,
@@ -60,6 +71,57 @@ export default function Profile() {
       toast.error("Could not update the profile details");
     }
   }
+
+  //will create a useEffect with whom will catch the data once the profile page is loaded
+  // useEffect will call a function, and will add some dependencies, [] -means load just one time inside the useEffect, so when the page is loaded call this function
+  //will create an async function inside the useEffect
+  useEffect(() => {
+    async function fetchUserListings() {
+      //creating a reference which is like an address for this listing
+      const listingRef = collection(db, "listings");
+      // after the reference we create a query. we want to take the listings that the person created, not the other listings
+      //use the query method from the firestore, and it is going to get a few things:
+      //1. listingRef
+      //2. we want to say where we want to get listingRef - where from firestore
+      //3. the place where we want to get is userRef that we added to the listing
+      //4. userRef should be equal to the auth.currentUser.uid
+      //5. then sort it by time using orderBy which is coming from firestore, in a descending way
+
+      const q = query(
+        listingRef,
+        where("userRef", "==", auth.currentUser.uid),
+        orderBy("timestamp", "descending")
+      );
+      //after we made the query, we can use getDocs to get the document
+      //created a const that makes a snapshot, and use await to use the getDocs from firestore
+      //to getDocs we will pass the query we have created
+
+      const querySnap = await getDocs(q);
+
+      //we can create a listings list, and we can loop through above querySnap, then add that listing data to this listings variable, then use the variable to show it the website
+      let listings = [];
+
+      //loop through the querySnap with forEach, because we need each document that is fetched
+      //we return that listings, and then push each document inside this listings array
+      //we're going to push an object each time
+      //we want to get the id which is coming from doc.id, and data from doc.data
+
+      querySnap.forEach((doc) => {
+        return listings.push({
+          id: doc.id,
+          data: doc.data,
+        });
+      });
+      //we now have all the data from listings, so we need to put it inside a hook called listings,setListings
+      //when we fetch the data and added it to the listings we can setLoading to false add the end
+      setListings(listings);
+      setLoading(false);
+    }
+
+    //call the function here
+    fetchUserListings();
+  }, [auth.currentUser.uid]); //so each time the authorization of person is changed the useEffect is going to be triggered and the new data will be fetched
+
   return (
     <>
       <section className="flex flex-col justify-center items-center mx-auto max-w-6xl">
@@ -114,14 +176,39 @@ export default function Profile() {
             </div>
           </form>
           {/* When click on this button, redirecting on listing page */}
-          <button type="submit" className="w-full bg-blue-600 text-white uppercase px-7 py-3 text-sm font-medium rounded shadow-md hover:bg-blue-700 transition duration-150 ease-in-out hover:shadow-lg active:bg-blue-800">
-            <Link to="/create-listing" className="flex justify-center items-center">
-              <FcHome className="mr-2 text-3xl bg-red-200 rounded-full p-1 border-2"/>
+          <button
+            type="submit"
+            className="w-full bg-blue-600 text-white uppercase px-7 py-3 text-sm font-medium rounded shadow-md hover:bg-blue-700 transition duration-150 ease-in-out hover:shadow-lg active:bg-blue-800"
+          >
+            <Link
+              to="/create-listing"
+              className="flex justify-center items-center"
+            >
+              <FcHome className="mr-2 text-3xl bg-red-200 rounded-full p-1 border-2" />
               Sell or rent your home
             </Link>
           </button>
         </div>
       </section>
+      <div className="max-w-6xl px-3 mt-6 mx-auto">
+        {/* if the loading is true we don't want to see this section */}
+        {!loading && listings.length > 0 && (
+          <>
+            <h2 className="text-2xl text-center font-semibold">My Listings</h2>
+            {/* we want to make an ul for the listing we have */}
+            <ul>
+              {/* inside the ul, we want to loop with .map through the listings and return a component, and being a map we need a key, otherwise will get an error */}
+              {listings.map((listing) => (
+                <ListingItem
+                  key={listing.id}
+                  id={listing.id}
+                  listing={listing.data}
+                />
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
     </>
   );
 }
