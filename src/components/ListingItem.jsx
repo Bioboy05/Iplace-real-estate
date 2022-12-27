@@ -2,16 +2,18 @@ import React from "react";
 import Moment from "react-moment";
 import { Link } from "react-router-dom";
 import { MdLocationOn } from "react-icons/md";
+import { FaTrash } from "react-icons/fa";
+import { MdEdit } from "react-icons/md";
 
 //data we want to get is listing and id
-export default function ListingItem({ listing, id }) {
+export default function ListingItem({ listing, id, onDelete, onEdit }) {
   return (
     //want to return the listing name, props that would be passed in Profile.jsx
-    <li className="relative bg-white flex flex-col justify-between items-center shadow-md hover:shadow-xl rounded-md overflow-hidden transition-shadow duration-105 m-[10px]">
+    <li className="relative bg-white flex flex-col justify-between items-center shadow-md hover:shadow-xl rounded-md overflow-hidden transition-shadow duration-150 m-[10px]">
       <Link className="contents" to={`/category/${listing.type}/${id}`}>
         {/* the src for this image will be imgUrls, but only the first image(album cover) */}
         <img
-          className="h-[170px] w-full object-cover hover:scale-150 transition-scale duration-200 ease-in"
+          className="h-[170px] w-full object-cover hover:scale-105 transition-scale duration-200 ease-in"
           loading="lazy" //meaning until we reach to that image, we don't want that image to be loaded, helping the page load faster
           src={listing.imgUrls[0]}
           alt=""
@@ -35,7 +37,7 @@ export default function ListingItem({ listing, id }) {
           </div>
           <p className="font-semibold m-0 text-xl truncate">{listing.name}</p>
           <p className=" text-amber-700 mt-2 font-semibold">
-            $
+            €
             {listing.offer
               ? listing.discountedPrice
                   //in order the price to be separated with a comma we need a regex
@@ -63,6 +65,21 @@ export default function ListingItem({ listing, id }) {
           </div>
         </div>
       </Link>
+      {/* if onDelete exists we're going to have the icon */}
+      {onDelete && (
+        <FaTrash
+          className="absolute bottom-2 right-2 h-[14px] cursor-pointer text-red-600"
+          // adding onClick event listener, that will call onDelete function that we're getting from the props, to which we'll pass the listing.id
+          onClick={() => onDelete(listing.id)}
+        />
+      )}
+      {onEdit && (
+        <MdEdit
+          className="absolute bottom-2 right-10 h-4 cursor-pointer"
+          // adding onClick event listener, that will call onEdit function that we're getting from the props, to which we'll pass the listing.id
+          onClick={() => onEdit(listing.id)}
+        />
+      )}
     </li>
   );
 }

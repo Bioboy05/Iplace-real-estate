@@ -1,6 +1,7 @@
 import { getAuth, updateProfile } from "firebase/auth"; //imported updateProfile for updating the authentication
 import {
   collection,
+  deleteDoc,
   doc,
   getDocs,
   orderBy,
@@ -122,6 +123,28 @@ export default function Profile() {
     fetchUserListings();
   }, [auth.currentUser.uid]); //so each time the authorization of person is changed the useEffect is going to be triggered and the new data will be fetched
 
+  async function onDelete(listingID) {
+    if (window.confirm("Are you sure you want to delete?")) {
+      // we wait for deleteDoc from firebase, this is getting doc,
+      //doc is taking 3 things: db, collection name - 'listings' and the ID - from props
+      await deleteDoc(doc(db, "listings", listingID));
+
+      // after deleting we need to update the list
+      //so we already have listings array, and use filter on it to give us each listing
+      const updatedListings = listings.filter(
+        //we want to keep everything except the one with this listingID from the props
+        (listing) => listing.id !== listingID
+      );
+      //update the hook
+      setListings(updatedListings);
+      toast.success("Successfully deleted the listing");
+    }
+    navigate();
+  }
+
+  function onEdit(listingID) {
+    navigate(`/edit-listing/${listingID}`);
+  }
   return (
     <>
       <section className="flex flex-col justify-center items-center mx-auto max-w-6xl">
@@ -201,10 +224,13 @@ export default function Profile() {
             <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 mt-6 mb-6">
               {/* inside the ul, we want to loop with .map through the listings and return a component, and being a map we need a key, otherwise will get an error */}
               {listings.map((listing) => (
+                //Making delete and edit functionality and passing as props to this listing item component
                 <ListingItem
                   key={listing.id}
                   id={listing.id}
                   listing={listing.data}
+                  onDelete={() => onDelete(listing.id)}
+                  onEdit={() => onEdit(listing.id)}
                 />
               ))}
             </ul>
