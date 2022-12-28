@@ -11,6 +11,7 @@ import Offers from "./pages/Offers";
 import Profile from "./pages/Profile";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import Listing from "./pages/Listing";
 
 function App() {
   return (
@@ -24,6 +25,10 @@ function App() {
           </Route>
           <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/offers" element={<Offers />} />
+          <Route
+            path="/category/:categoryName/:listingId"
+            element={<Listing />}
+          />
           <Route path="/profile" element={<Profile />} />
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
@@ -31,7 +36,7 @@ function App() {
             <Route path="/create-listing" element={<CreateListing />} />
           </Route>
           <Route path="/edit-listing" element={<PrivateRoute />}>
-              {/* listingId being a parameter with the id of the person, to have access to it */}
+            {/* listingId being a parameter with the id of the person, to have access to it */}
             <Route path="/edit-listing/:listingId" element={<EditListing />} />
           </Route>
         </Routes>

@@ -69,6 +69,7 @@ export default function EditListing() {
   //we create a const that will use the useParams hook (from react-router-dom)
   const params = useParams();
 
+  // PROTECTION useEffect
   //this useEffect is going to check if the listing belongs to the person who's editing it
   useEffect(() => {
     //if the id inside the listing is not equal tot he id we're getting from the authentication then toast error
