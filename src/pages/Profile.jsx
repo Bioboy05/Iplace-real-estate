@@ -126,7 +126,7 @@ export default function Profile() {
   async function onDelete(listingID) {
     if (window.confirm("Are you sure you want to delete?")) {
       // we wait for deleteDoc from firebase, this is getting doc,
-      //doc is taking 3 things: db, collection name - 'listings' and the ID - from props
+      // doc is taking 3 things: db, collection name - 'listings' and the ID - from props
       await deleteDoc(doc(db, "listings", listingID));
 
       // after deleting we need to update the list
@@ -214,7 +214,7 @@ export default function Profile() {
         </div>
       </section>
       <div className="max-w-6xl px-3 mt-6 mx-auto">
-        {/* if the loading is true we don't want to see this section */}
+        {/* if the loading is true we don't want to see this section, and if the listing has at least one listing */}
         {!loading && listings.length > 0 && (
           <>
             <h2 className="text-2xl text-center font-semibold mb-6">
