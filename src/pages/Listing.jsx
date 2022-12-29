@@ -1,8 +1,9 @@
 import { doc, getDoc } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
 import React, { useEffect, useState } from "react";
+import { FaBath, FaBed, FaMapMarkerAlt, FaParking } from "react-icons/fa";
 import { IoMdShareAlt } from "react-icons/io";
 import { MdChair } from "react-icons/md";
-import { FaMapMarkerAlt, FaBed, FaBath, FaParking } from "react-icons/fa";
 import { useParams } from "react-router-dom";
 import SwiperCore, {
   Autoplay,
@@ -14,13 +15,18 @@ import "swiper/css/bundle";
 import { Swiper, SwiperSlide } from "swiper/react";
 import Spinner from "../components/Spinner";
 import { db } from "../firebase";
+import Contact from "../components/Contact";
 
 export default function Listing() {
+  const auth = getAuth();
   const params = useParams();
   const [listing, setListing] = useState(null);
   const [loading, setLoading] = useState(true);
   //we use this hook to change the status of this
   const [shareLinkCopied, setShareLinkCopied] = useState(false);
+
+  //in order to use the ContactLandlord component we create a hook. False because we don't want to see the contact form first
+  const [contactLandlord, setContactLandlord] = useState(false);
   SwiperCore.use(Autoplay, Navigation, Pagination);
   useEffect(() => {
     //we need to have a function to get the data
@@ -93,8 +99,8 @@ export default function Listing() {
           Link Copied
         </p>
       )}
-      <div className="m-4 flex flex-col md:flex-row max-w-6xl lg:mx-auto p-4 rounded-lg shadow-lg bg-white lg:gap-5">
-        <div className="w-full h-[200px] lg-[400px]">
+      <div className="m-4 flex flex-col md:flex-row max-w-6xl lg:mx-auto p-4 rounded-lg shadow-lg bg-white lg:gap-5 ">
+        <div className="w-full">
           <p className="text-2xl font-bold mb-3 text-amber-900">
             {listing.name} - €{" "}
             {listing.offer
@@ -112,26 +118,29 @@ export default function Listing() {
           </p>
           <div className="flex justify-start items-center gap-4 w-[75%]">
             <p className="bg-red-800 w-full max-w-[200px] rounded-md p-1 text-white text-center font-semibold shadow-md">
+              {/* show the correct listing type */}
               {listing.type === "rent" ? "Rent" : "Sale"}
             </p>
             {/* if listing.offer is true we want to add another p which is going to show how much discount we have  */}
-            <p className="w-full max-w-[200px] bg-green-800 rounded-md p-1 text-white text-center font-semibold shadow-md">
-              {listing.offer && (
-                <p>
-                  €
-                  {(+listing.regularPrice - +listing.discountedPrice)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-                  discount
-                </p>
-              )}
-            </p>
+
+            {/* so if we have an offer, we want to show the difference  */}
+            {listing.offer && (
+              <p className="w-full max-w-[200px] bg-green-800 rounded-md p-1 text-white text-center font-semibold shadow-md">
+                €
+                {(+listing.regularPrice - +listing.discountedPrice)
+                  .toString()
+                  .replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+                discount
+              </p>
+            )}
           </div>
           <p className="mt-3 mb-3">
             <span className="font-semibold ">Description - </span>
             {listing.description}
           </p>
-          <ul className="flex items-center gap-2 sm:gap-10 text-sm font-semibold">
+
+          {/* Added the icons for the characteristics of the house */}
+          <ul className="flex items-center gap-2 sm:gap-10 text-sm font-semibold mb-6">
             <li className="flex items-center whitespace-nowrap">
               <FaBed className="text-lg mr-1" />
               {+listing.bedrooms > 1 ? `${listing.bedrooms} Beds` : "1 Bed"}
@@ -142,13 +151,38 @@ export default function Listing() {
             </li>
             <li className="flex items-center whitespace-nowrap">
               <FaParking className="text-lg mr-1" />
-              {+listing.parking > 1 ? "Parking spot" : "No Parking"}
+              {listing.parking ? "Parking spot" : "No Parking"}
             </li>
             <li className="flex items-center whitespace-nowrap">
               <MdChair className="text-lg mr-1" />
-              {+listing.furnished > 1 ? "Furnished" : "Not furnished"}
+              {listing.furnished ? "Furnished" : "Not furnished"}
             </li>
           </ul>
+          {/* checking if the currentUser is the owner of this listing, if not, we show a CONTACT LANDLORD button
+          1. we have the listing from the hook
+          2. the owner is userRef
+          3. if the owner of the listing it's not equal with the person who's authorized (current user who's signed in, we use the .uid also
+          4. create auth and import getAuth from firebase
+          5. in case the page loaded faster than the checking of the auth, 
+          we protect it with a question mark, because it allows to safely access properties of an object without having to check for the existence of the object or its properties. In this case, the ?. operator is used to access the uid property of the currentUser object, which may not exist if the user is not authenticated.
+          6. adding another condition here: if the contactLandlord is false we can see the button. So when we click the button it disappears*/}
+
+          {listing.userRef !== auth.currentUser?.uid && !contactLandlord && (
+            <div className="mt-10">
+              {/* adding onClick eventlistener that will call a function that will set Contact Landlord in true */}
+              <button
+                onClick={() => {
+                  setContactLandlord(true);
+                }}
+                className="px-7 py-3 bg-amber-600 text-white font-medium text-sm uppercase rounded shadow-md hover:bg-amber-700 hover:shadow-lg focus:bg-amber-700 focus:shadow-lg w-full text-center transition duration-150 ease-in-out"
+              >
+                Contact Landlord
+              </button>
+            </div>
+          )}
+          {contactLandlord && (
+            <Contact userRef={listing.userRef} listing={listing} />
+          )}
         </div>
         <div className="bg-blue-300 w-full h-[200px] lg-[400px] z-10 overflow-x-hidden"></div>
       </div>
