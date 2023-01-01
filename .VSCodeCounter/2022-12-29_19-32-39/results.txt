@@ -1,0 +1,66 @@
+Date : 2022-12-29 19:32:39
+Directory : e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app
+Total : 30 files,  32884 codes, 366 comments, 189 blanks, all 33439 lines
+
+Languages
++------------+------------+------------+------------+------------+------------+
+| language   | files      | code       | comment    | blank      | total      |
++------------+------------+------------+------------+------------+------------+
+| JSON       |          3 |     30,802 |         11 |          3 |     30,816 |
+| JavaScript |         23 |      2,003 |        347 |        147 |      2,497 |
+| Markdown   |          1 |         38 |          0 |         33 |         71 |
+| HTML       |          1 |         20 |          0 |          3 |         23 |
+| XML        |          1 |         15 |          0 |          0 |         15 |
+| CSS        |          1 |          6 |          8 |          3 |         17 |
++------------+------------+------------+------------+------------+------------+
+
+Directories
++--------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| path                                                                                             | files      | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| .                                                                                                |         30 |     32,884 |        366 |        189 |     33,439 |
+| public                                                                                           |          2 |         35 |         11 |          4 |         50 |
+| src                                                                                              |         23 |      2,008 |        354 |        149 |      2,511 |
+| src\assets                                                                                       |          1 |         15 |          0 |          0 |         15 |
+| src\assets\svg                                                                                   |          1 |         15 |          0 |          0 |         15 |
+| src\components                                                                                   |          6 |        269 |         44 |         25 |        338 |
+| src\hooks                                                                                        |          1 |         16 |          6 |          4 |         26 |
+| src\pages                                                                                        |          9 |      1,607 |        284 |        105 |      1,996 |
++--------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+
+Files
++--------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| filename                                                                                         | language   | code       | comment    | blank      | total      |
++--------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\README.md                       | Markdown   |         38 |          0 |         33 |         71 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\package-lock.json               | JSON       |     30,735 |          0 |          1 |     30,736 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\package.json                    | JSON       |         52 |          0 |          1 |         53 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\postcss.config.js               | JavaScript |          6 |          0 |          1 |          7 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\public\index.html               | HTML       |         20 |          0 |          3 |         23 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\public\manifest.json            | JSON       |         15 |         11 |          1 |         27 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\App.js                      | JavaScript |         58 |          0 |          3 |         61 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\assets\svg\spinner.svg      | XML        |         15 |          0 |          0 |         15 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\components\Contact.jsx      | JavaScript |         57 |         15 |          5 |         77 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\components\Header.jsx       | JavaScript |         72 |         10 |          7 |         89 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\components\ListingItem.jsx  | JavaScript |         78 |          5 |          3 |         86 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\components\OAuth.jsx        | JavaScript |         40 |          9 |          5 |         54 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\components\PrivateRoute.jsx | JavaScript |         11 |          4 |          3 |         18 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\components\Spinner.jsx      | JavaScript |         11 |          1 |          2 |         14 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\firebase.js                 | JavaScript |         12 |          5 |          3 |         20 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\hooks\useAuthStatus.jsx     | JavaScript |         16 |          6 |          4 |         26 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\index.css                   | CSS        |          6 |          8 |          3 |         17 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\index.js                    | JavaScript |         12 |          3 |          3 |         18 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\pages\CreateListing.jsx     | JavaScript |        446 |         93 |         29 |        568 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\pages\EditListing.jsx       | JavaScript |        478 |        108 |         33 |        619 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\pages\ForgotPassword.jsx    | JavaScript |         79 |          2 |          7 |         88 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\pages\Home.jsx              | JavaScript |          6 |          0 |          2 |          8 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\pages\Listing.jsx           | JavaScript |        162 |         24 |          6 |        192 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\pages\Offers.jsx            | JavaScript |          6 |          0 |          2 |          8 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\pages\Profile.jsx           | JavaScript |        178 |         48 |         17 |        243 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\pages\SignIn.jsx            | JavaScript |        116 |          5 |          4 |        125 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\pages\SignUp.jsx            | JavaScript |        136 |          4 |          5 |        145 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\reportWebVitals.js          | JavaScript |         12 |          0 |          2 |         14 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\src\setupTests.js               | JavaScript |          1 |          4 |          1 |          6 |
+| e:\proiecte\Proiect-react-real-estate-app\iplace-real-estate-app\tailwind.config.js              | JavaScript |         10 |          1 |          0 |         11 |
+| Total                                                                                            |            |     32,884 |        366 |        189 |     33,439 |
++--------------------------------------------------------------------------------------------------+------------+------------+------------+------------+------------+
