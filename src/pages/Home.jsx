@@ -209,7 +209,7 @@ export default function Home() {
               Places for sale
             </h2>
             {/* a ling to the sales page */}
-            <Link to="/category/rent">
+            <Link to="/category/sale">
               <p className="px-3 text-sm text-blue-600 hover:text-blue-800 transition duration-150 ease-in-out">
                 Show more places for sale
               </p>

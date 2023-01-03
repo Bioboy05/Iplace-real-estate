@@ -8,18 +8,22 @@ import {
   where,
 } from "firebase/firestore";
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import ListingItem from "../components/ListingItem";
 import Spinner from "../components/Spinner";
 import { db } from "../firebase";
 
-export default function Offers() {
+export default function Category() {
   //put the data in a piece of state that we call listings
   //make another piece of state for loading because we need to wait until the data is loaded
   //a third piece of state for the last fetched listing
   const [listings, setListings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [lastFetchedListing, setLastFetchedListing] = useState(null);
+
+  //we need to get the information for where the offer is rent or sale, from URL and for that we need useParams from react-router-dom
+  const params = useParams();
 
   //create a useEffect to fetch the data
   useEffect(() => {
@@ -34,12 +38,12 @@ export default function Offers() {
         //after the reference, we make the query
         //creating a variable q which holds the query method from firestore
         //then query method takes the listing ref we created
-        //then tell it where(from firestore) to get it, which is to "offer" equal true (if the offer is true we want the listings)
+        //then tell it where(from firestore) to get it, which is "type" equal to categoryName from App.js
         //we sort it then (orderBy) by time, descending (newest is the first in the list)
         //the limit it to 8 listings
         const q = query(
           listingRef,
-          where("offer", "==", true),
+          where("type", "==", params.categoryName),
           orderBy("timestamp", "desc"),
           limit(8)
         );
@@ -73,7 +77,7 @@ export default function Offers() {
       }
     }
     fetchListings();
-  }, []);
+  }, [params.categoryName]);
 
   //because we will use more fetched data, we'll make the function async for the button
   async function onFetchMoreListings() {
@@ -85,12 +89,12 @@ export default function Offers() {
       //after the reference, we make the query
       //creating a variable q which holds the query method from firestore
       //then query method takes the listing ref we created
-      //then tell it where(from firestore) to get it, which is to "offer" equal true (if the offer is true we want the listings)
+      //then tell it where(from firestore) to get it, which is "type" equal categoryName (from App.js) using params
       //we sort it then (orderBy) by time, descending (newest is the first in the list)
       //the limit it to 8 listings
       const q = query(
         listingRef,
-        where("offer", "==", true),
+        where("type", "==", params.categoryName),
         orderBy("timestamp", "desc"),
         //use the startAfter from firestore, which is going to start from tha lastFetchedListing
         startAfter(lastFetchedListing),
@@ -129,7 +133,9 @@ export default function Offers() {
 
   return (
     <div className="max-w-6xl mx-auto px-3">
-      <h1 className="text-3xl text-center mt-6 font-bold mb-6">Offers</h1>
+      <h1 className="text-3xl text-center mt-6 font-bold mb-6">
+        {params.categoryName === "rent" ? "Places for rent" : "Places for sale"}
+      </h1>
       {/* if the loading is true the show the spinner */}
       {/* otherwise if the listings exist and there is at least one */}
       {loading ? (
