@@ -13,6 +13,56 @@ import Slider from "../components/Slider";
 import { db } from "../firebase";
 
 export default function Home() {
+  // Search Results
+  const [searchResults, setSearchResults] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+
+  useEffect(() => {
+    // This function is used to fetch search results from the database
+    async function fetchSearch() {
+      // If the search term is empty, set the search results to an empty array and return
+      if (!searchTerm) {
+        setSearchResults([]);
+        return;
+      }
+      try {
+        // Get a reference to the "listings" collection in the database
+        const searchListingRef = collection(db, "listings");
+        // Create a query to search for listings where the name is greater than or equal to the search term
+        // The limit method limits the number of results returned to 4
+        const qSearch = query(
+          searchListingRef,
+          where("name", ">=", searchTerm),
+          limit(4)
+        );
+
+        // Create an array to hold the search results
+        const searchListings = [];
+        // Get the documents returned by the query and add them to the searchListings array
+        (await getDocs(qSearch)).forEach((doc) => {
+          searchListings.push({
+            id: doc.id,
+            data: doc.data(),
+          });
+        });
+        // Update the searchResults state with the searchListings array
+        setSearchResults(searchListings);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+    // If there is a search term, call the fetchSearch function
+    // If there is no search term, set the searchResults state to an empty array
+    if (searchTerm) {
+      fetchSearch();
+    } else {
+      setSearchResults([]);
+    }
+  }, [searchTerm]);
+  // This useEffect will re-run every time the searchTerm state is updated
+  // It will call the fetchSearch function which will update the searchResults state with the new search results
+  // If there is no search term, the searchResults state will be set to an empty array
+
   //Offers
   const [offerListings, setOfferListings] = useState(null);
   //now we fill this offerListing using useEffect
@@ -146,16 +196,50 @@ export default function Home() {
     }
     fetchListings();
   }, []);
+
   return (
     <div>
       <Slider />
+      {/* The search input */}
+      <div>
+        <div>
+          <label htmlFor="search"></label>
+          <input
+            className="m-2 px-4 py-2 text-xl text-gray-700 bg-white border-gray-300 rounded transition-ease-in-out w-[99%]"
+            name="search"
+            id="search"
+            type="text"
+            value={searchTerm}
+            placeholder="Search for listings..."
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
+        </div>
+        <div className="max-w-6xl mx-auto pt-4 space-y-6">
+          {searchResults && searchResults.length > 0 && (
+            <div className="m-2 mb-6">
+              <h2 className="px-3 text-2xl mt-6 font-semibold">
+                Search Results
+              </h2>
+              <ul className="sm:grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {searchResults.map((listing) => (
+                  <ListingItem
+                    key={listing.id}
+                    listing={listing.data}
+                    id={listing.id}
+                  />
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
       <div className="max-w-6xl mx-auto pt-4 space-y-6">
         {/* if offerListings exists and has at least one offer then we want to have a section */}
         {offerListings && offerListings.length > 0 && (
           //first we have a title Recent Offers, then a link to the offers page and finally the listings
           <div className="m-2 mb-6">
             <h2 className="px-3 text-2xl mt-6 font-semibold">Recent Offers</h2>
-            {/* a ling to the offers page */}
+            {/* a link to the offers page */}
             <Link to="/offers">
               <p className="px-3 text-sm text-blue-600 hover:text-blue-800 transition duration-150 ease-in-out">
                 Show more offers

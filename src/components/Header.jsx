@@ -14,7 +14,8 @@ export default function Header() {
       return true;
     }
   }
-  const navigate = useNavigate();
+
+  const navigate = useNavigate();//this uses the rapid navigation offered by react-router-dom (without refreshing the page)
   // initialize the authentication
   const auth = getAuth();
 

@@ -20,7 +20,6 @@ export default function SignUp() {
     password: "",
   });
   const { name, email, password } = formData; //destructured email & password from the formData, so i can use the email variable inside the form
-  const navigate = useNavigate();
 
   function onChange(event) {
     //this event will give me all the information i'll write in the form

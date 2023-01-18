@@ -25,7 +25,7 @@ export default function Profile() {
   const [listings, setListings] = useState(null);
   const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
-    //Won't work directly, because the page is rendering before the data that is coming from firebase, we get an error because we need to wait until the data has come from the auth, so we add a middleman
+    //Won't work directly, because the page is rendering before the data that is coming from firebase, we get an error because we need to wait until the data has come from the auth, so we add a middleman - the loading effect
     name: auth.currentUser.displayName,
     email: auth.currentUser.email,
   });

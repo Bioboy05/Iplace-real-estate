@@ -7,7 +7,7 @@ export function useAuthStatus() {
   const [loggedIn, setLoggedIn] = useState(false); //suppose that the person is new, so default is going to be false, afterwards we check if the person is authenticated or not. It becomes true if the person is authenticated.
   const [checkingStatus, setCheckingStatus] = useState(true); //we need some time to get the information from firebase so we need to add another hook to check the status to see if the information came or not, otherwise we need to add some loading effect.
 
-  //Ask firebase if the person is auth or not using useEffect hook, using useEffect which is coming from react
+  //Ask firebase if the person is auth or not using useEffect hook
   useEffect(() => {
     //1st need to get auth ->initialize it with getAuth which is coming from firebase/auth
     const auth = getAuth();

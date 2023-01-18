@@ -10,7 +10,7 @@ export default function OAuth() {
   const navigate = useNavigate();
   async function onGoogleClick() {
     //trying to sign the person with a pop-up which is going to get the auth and the provider
-    //the we got the user using result.user which is coming as a promise from "signInWithPopup"
+    //then we got the user using result.user which is coming as a promise from "signInWithPopup"
     try {
       const auth = getAuth();
       const provider = new GoogleAuthProvider(); //a method that let's the user use the "Sign in with..."" with a pop-up, making the function return a promise, so it's going to be an async function
