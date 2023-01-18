@@ -68,3 +68,34 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+Iplace Real Estate App
+Welcome to the Iplace real estate app! This website allows users to browse properties for sale or for rent, and manage their account information.
+
+### Features
+View listings of properties for sale or for rent
+
+Contact the property owner or agent to schedule a showing or ask questions
+
+Create an account and log in to access additional features
+
+Edit account information
+
+Responsive design with three visible main pages: Home, Offers, and Sign In
+
+### How to use
+Browse the homepage to see the latest listings.
+
+To view more details about a property, click on the listing.
+
+To contact the property owner or agent, click the "Contact" button on the listing page.
+
+To create an account, click the "Sign Up" button on the homepage. Follow the prompts to create your account.
+
+To log in, click the "Sign In" button on the homepage. Enter your login information to access your account.
+
+Once you are logged in, you can access your account information by clicking on your profile icon in the top right corner of the page.
+
+From your account page, you can edit your account information.
+
+Hope you find the perfect property with the Iplace real estate app!
